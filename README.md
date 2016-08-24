@@ -14,6 +14,7 @@ npm install -g generator-kotlin-android-boilerplate
 Then generate your new project:
 
 ```bash
+mkdir NewApp && cd $_
 yo kotlin-android-boilerplate
 ```
 
