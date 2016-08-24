@@ -9,7 +9,6 @@ const replace = require('replace');
 const ncp = require('ncp').ncp;
 
 // Clone a given repository into the `./tmp` folder.
-
 rimraf.sync(path.join(__dirname, '/templates'));
 rimraf.sync(path.join(__dirname, '/tmp'));
 mkdirp('./templates');
