@@ -52,7 +52,6 @@ module.exports = yeoman.Base.extend({
 
     mkdirp('app');
     mkdirp('app/src/main/kotlin/' + packageDir);
-    mkdirp('app/src/androidTest/kotlin/' + packageDir);
     mkdirp('app/src/unitTests/kotlin/' + packageDir);
 
     this.copy('gitignore', '.gitignore');
@@ -68,12 +67,12 @@ module.exports = yeoman.Base.extend({
 
     this.directory('gradle', 'gradle');
     this.directory('art', 'art');
+    this.directory('app/src/main/res', 'app/src/main/res');
 
     this.template('app/build.gradle', 'app/build.gradle');
-    // this.template('app/src/androidTest/kotlin/io/github/plastix/kotlinboilerplate', 'app/src/androidTest/kotlin/' + packageDir, this, {});
     this.template('app/src/main/AndroidManifest.xml', 'app/src/main/AndroidManifest.xml');
     this.template('app/src/main/kotlin/io/github/plastix/kotlinboilerplate', 'app/src/main/kotlin/' + packageDir, this, {});
     this.template('app/src/main/res/layout', 'app/src/main/res/layout', this, {});
-    this.template('app/src/unitTests/kotlin/io/github/plastix/kotlinboilerplate', 'app/src/test/kotlin/' + packageDir, this, {});
+    this.template('app/src/unitTests/kotlin/io/github/plastix/kotlinboilerplate', 'app/src/unitTests/kotlin/' + packageDir, this, {});
   }
 });
