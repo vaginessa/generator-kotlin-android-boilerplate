@@ -11,7 +11,7 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the polished ' + chalk.red('Kotlin Android Boilerplate') + ' generator!'
+      'Welcome to the polished ' + chalk.red('Kotlin Android Boilerplate from @Plastix') + ' generator!'
     ));
 
     const prompts = [
