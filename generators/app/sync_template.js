@@ -1,12 +1,12 @@
 'use strict';
 
-const path = require('path');
-const rimraf = require('rimraf');
-const mv = require('mv');
-const mkdirp = require('mkdirp');
-const clone = require('nodegit').Clone;
-const replace = require('replace');
-const ncp = require('ncp').ncp;
+var path = require('path');
+var rimraf = require('rimraf');
+var mv = require('mv');
+var mkdirp = require('mkdirp');
+var clone = require('nodegit').Clone;
+var replace = require('replace');
+var ncp = require('ncp').ncp;
 
 // Clone a given repository into the `./tmp` folder.
 rimraf.sync(path.join(__dirname, '/templates'));
