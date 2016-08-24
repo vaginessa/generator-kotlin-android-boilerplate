@@ -1,4 +1,5 @@
-# generator-kotlin-android-boilerplate [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+# generator-kotlin-android-boilerplate
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 > Yeoman Generator to create Android App using https://github.com/Plastix/Kotlin-Android-Boilerplate.
 
 ## Installation
