@@ -1,6 +1,6 @@
 {
   "name": "generator-kotlin-android-boilerplate",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Yeoman Generator to create Android App using https://github.com/Plastix/Kotlin-Android-Boilerplate.",
   "homepage": "https://github.com/ravidsrk/generator-kotlin-android-boilerplate",
   "author": {
