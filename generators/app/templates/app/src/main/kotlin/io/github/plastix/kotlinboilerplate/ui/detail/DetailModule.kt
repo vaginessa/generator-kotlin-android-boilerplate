@@ -3,12 +3,12 @@ package <%= appPackage %>.ui.detail
 import android.support.v7.app.AppCompatActivity
 import dagger.Module
 import dagger.Provides
-import <%= appPackage %>.ui.ActivityScope
+import <%= appPackage %>.data.remote.model.Repo
 import <%= appPackage %>.ui.base.ActivityModule
 
 @Module
-class DetailModule(activity: AppCompatActivity) : ActivityModule(activity) {
+class DetailModule(activity: AppCompatActivity, val repo: Repo) : ActivityModule(activity) {
 
-    @Provides @ActivityScope
-    fun providePresenter(presenter: DetailPresenterImpl): DetailPresenter = presenter
+    @Provides
+    fun provideRepo(): Repo = repo
 }

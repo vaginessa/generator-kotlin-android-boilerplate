@@ -1,9 +1,9 @@
 package <%= appPackage %>.data.remote
 
 import <%= appPackage %>.data.remote.model.SearchResponse
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
-import rx.Single
 
 interface GithubApiService {
 

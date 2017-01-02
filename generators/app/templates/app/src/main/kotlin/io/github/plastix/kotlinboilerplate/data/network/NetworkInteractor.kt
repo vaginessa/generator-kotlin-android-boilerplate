@@ -1,6 +1,7 @@
 package <%= appPackage %>.data.network
 
-import rx.Completable
+import io.reactivex.Completable
+
 
 interface NetworkInteractor {
 

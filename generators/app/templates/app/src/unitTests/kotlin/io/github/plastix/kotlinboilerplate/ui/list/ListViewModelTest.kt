@@ -5,20 +5,20 @@ import <%= appPackage %>.data.remote.GithubApiService
 import <%= appPackage %>.data.remote.model.Owner
 import <%= appPackage %>.data.remote.model.Repo
 import <%= appPackage %>.data.remote.model.SearchResponse
-import <%= appPackage %>.util.RxSchedulersOverrideRule
+import io.github.plastix.rxschedulerrule.RxSchedulerRule
+import io.reactivex.Completable
+import io.reactivex.Single
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import rx.Completable
-import rx.Single
 
-class ListPresenterTest {
+class ListViewModelTest {
 
     @get:Rule @Suppress("unused")
-    val schedulerRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
+    val schedulerRule = RxSchedulerRule()
 
     @Mock
     lateinit var apiService: GithubApiService
@@ -26,17 +26,34 @@ class ListPresenterTest {
     @Mock
     lateinit var networkInteractor: NetworkInteractor
 
-    @Mock
-    lateinit var view: ListView
-
-    lateinit var presenter: ListPresenter
+    lateinit var viewModel: ListViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        presenter = ListPresenterImpl(apiService, networkInteractor)
-        presenter.bindView(view)
+        viewModel = ListViewModel(apiService, networkInteractor)
+        viewModel.bind()
+    }
+
+    @Test
+    fun getRepos_shouldReturnEmpty() {
+        viewModel.getRepos().test().assertValue(emptyList())
+    }
+
+    @Test
+    fun loadingState_shouldBeFalse() {
+        viewModel.loadingState().test().assertValue(false)
+    }
+
+    @Test
+    fun fetchErrors_shouldReturnNothing() {
+        viewModel.fetchErrors().test().assertNoErrors()
+    }
+
+    @Test
+    fun networkErrors_shouldReturnNothing() {
+        viewModel.networkErrors().test().assertNoErrors()
     }
 
     @Test
@@ -49,47 +66,45 @@ class ListPresenterTest {
         Mockito.`when`(apiService.repoSearch(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Single.just(response))
 
-        presenter.getKotlinRepos()
+        viewModel.fetchRepos()
 
-        Mockito.verify(apiService).repoSearch(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())
-        Mockito.verify(networkInteractor).hasNetworkConnectionCompletable()
-        Mockito.verify(view, Mockito.times(1)).startLoading()
-        Mockito.verify(view, Mockito.times(1)).updateList(repos)
+        viewModel.getRepos().test().assertValue(repos)
+        viewModel.loadingState().test().assertValue(false)
     }
 
     @Test
     fun getKotlinRepos_shouldErrorWithNetworkMessage() {
+        val error = NetworkInteractor.NetworkUnavailableException()
         Mockito.`when`(networkInteractor.hasNetworkConnectionCompletable())
                 .thenReturn(
-                        Completable.error(NetworkInteractor.NetworkUnavailableException())
+                        Completable.error(error)
                 )
 
         val response: SearchResponse = SearchResponse(0, listOf(mockRepo()))
         Mockito.`when`(apiService.repoSearch(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Single.just(response))
+        val networkObserver = viewModel.networkErrors().test()
 
-        presenter.getKotlinRepos()
+        viewModel.fetchRepos()
 
-        Mockito.verify(networkInteractor).hasNetworkConnectionCompletable()
-        Mockito.verify(view, Mockito.times(1)).startLoading()
-        Mockito.verify(view, Mockito.times(1)).errorNoNetwork()
+        viewModel.loadingState().test().assertValue(false)
+        networkObserver.assertValue(error)
     }
 
     @Test
-    fun getKotlinRepos_shoulErrorWithFetchMessage() {
+    fun getKotlinRepos_shouldErrorWithFetchMessage() {
         Mockito.`when`(networkInteractor.hasNetworkConnectionCompletable())
                 .thenReturn(Completable.complete())
 
+        val error = Throwable("Error")
         Mockito.`when`(apiService.repoSearch(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
-                .thenReturn(Single.error(Throwable("Error")))
+                .thenReturn(Single.error(error))
+        val fetchObserver = viewModel.fetchErrors().test()
 
+        viewModel.fetchRepos()
 
-        presenter.getKotlinRepos()
-
-        Mockito.verify(apiService).repoSearch(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())
-        Mockito.verify(networkInteractor).hasNetworkConnectionCompletable()
-        Mockito.verify(view, Mockito.times(1)).startLoading()
-        Mockito.verify(view, Mockito.times(1)).errorFetchRepos()
+        viewModel.loadingState().test().assertValue(false)
+        fetchObserver.assertValue(error)
     }
 
     fun mockRepo() = Repo("", "", Owner("", ""), "", 0, 0)
