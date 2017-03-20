@@ -10,8 +10,7 @@ import <%= appPackage %>.ApplicationComponent
 import <%= appPackage %>.R
 import <%= appPackage %>.data.remote.model.Repo
 import <%= appPackage %>.databinding.ActivityListBinding
-import <%= appPackage %>.extensions.hide
-import <%= appPackage %>.extensions.show
+import <%= appPackage %>.extensions.isVisible
 import <%= appPackage %>.extensions.showSnackbar
 import <%= appPackage %>.ui.base.ViewModelActivity
 import <%= appPackage %>.ui.detail.DetailActivity
@@ -103,11 +102,8 @@ class ListActivity : ViewModelActivity<ListViewModel, ActivityListBinding>() {
     }
 
     private fun updateEmptyView() {
-        if (adapter.itemCount == 0) {
-            binding.emptyView.root.show()
-        } else {
-            binding.emptyView.root.hide()
-        }
+        val thereIsNoItems = adapter.itemCount == 0
+        binding.emptyView.root.isVisible = thereIsNoItems
     }
 
     private fun errorNoNetwork() {
